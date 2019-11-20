@@ -1,0 +1,18 @@
+type token =
+    STATIC
+  | NETMASK
+  | LOOPBACK
+  | IP of string
+  | INET
+  | IFACE
+  | ID of string
+  | GATEWAY
+  | EOF
+  | DHCP
+  | AUTO
+  | ADDRESS
+val menhir_begin_marker : int
+val xv_t : unit
+val xv_is : unit
+val xv_i : unit
+val menhir_end_marker : int
