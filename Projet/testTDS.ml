@@ -3,13 +3,14 @@ open Exceptions
 
 exception ErreurNonDetectee;;
   
-(*
+
 let%test_unit "testDoubleDeclarationVariable1" = 
   try 
     let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationVariable1.rat"
     in raise ErreurNonDetectee
   with
   | DoubleDeclaration("x") -> ()
+(*
 	
 let%test_unit "testDoubleDeclarationVariable2" = 
   let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationVariable2.rat" in ()

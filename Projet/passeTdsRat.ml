@@ -17,28 +17,47 @@ struct
 (* Vérifie la bonne utilisation des identifiants et tranforme l'expression
 en une expression de type AstTds.expression *)
 (* Erreur si mauvaise utilisation des identifiants *)
-let analyse_tds_expression tds e = 
+let rec analyse_tds_expression tds e = 
   match e with
   | AstSyntax.AppelFonction (n, le) ->
     begin
-      match chercherLocalement tds n with
-        | None ->
-          let nle = analyse_tds_expression tds e in
-          let info = InfoVar (n, Undefined, 0 "") in
-          let ia = info_ast_to_info info in
-          AppelFonction(nle, ia);
-        | Some _ ->
-          raise (DoubleDeclaration n)
+      match chercherGlobalement tds n with
+        | None -> 
+          raise (IdentifiantNonDeclare n)
+        | Some _ as i ->
+          let nle = List.fold_right(analyser_tds_expression tds le) in
+          AppelFonction(i, nle)
     end
 
   | AstSyntax.Rationnel (e1,e2) -> 
+    let ne1 = analyse_tds_expression tds e1 in 
+    let ne2 = analyse_tds_expression tds e1 in 
+    Rationnel(ne1, ne2)
   | AstSyntax.Numerateur e1 ->
+    let ne1 = analyse_tds_expression tds e1 in 
+    Numerateur(ne1) 
   | AstSyntax.Denominateur e1 -> 
+    let ne1 = analyse_tds_expression tds e1 in 
+    Denominateur(ne1)
   | AstSyntax.Ident n ->
+    begin 
+      match chercherGlobalement tds n with
+        | None ->
+          let info = InfoVar (n,Undefined, 0, "") in
+          let ia = info_to_info_ast info in
+          Ident(ia)
+        | Some _ as ia ->
+          Ident(ia)
+    end
   | AstSyntax.True ->
+    True
   | AstSyntax.False ->
+    False
   | AstSyntax.Entier i -> 
+    Entier(i)
   | AstSyntax.Binaire (b,e1,e2) -> 
+    Binaire(e, e1, e2)
+    
 
 (* analyse_tds_instruction : AstSyntax.instruction -> tds -> AstTds.instruction *)
 (* Paramètre tds : la table des symboles courante *)
