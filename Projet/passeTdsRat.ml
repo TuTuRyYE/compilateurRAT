@@ -19,19 +19,23 @@ en une expression de type AstTds.expression *)
 (* Erreur si mauvaise utilisation des identifiants *)
 let rec analyse_tds_expression tds e = 
   match e with
-  | AstSyntax.AppelFonction (n, le) ->
+  (*| AstSyntax.AppelFonction (n, le) ->
     begin
       match chercherGlobalement tds n with
         | None -> 
           raise (IdentifiantNonDeclare n)
-        | Some _ as i ->
-          let nle = List.fold_right(analyser_tds_expression tds le) in
-          AppelFonction(i, nle)
-    end
+        | Some ia ->
+          begin 
+          match info_ast_to_info ia with
+          | InfoFun(_,_,_) -> let nl = 
+            List.map(fun exp -> analyse_tds_expression tds exp) le in AppelFonction(ia,nl)
+          | _ -> raise(MauvaiseUtilisationIdentifiant n)
+          end
+    end*)
 
   | AstSyntax.Rationnel (e1,e2) -> 
     let ne1 = analyse_tds_expression tds e1 in 
-    let ne2 = analyse_tds_expression tds e1 in 
+    let ne2 = analyse_tds_expression tds e2 in 
     Rationnel(ne1, ne2)
   | AstSyntax.Numerateur e1 ->
     let ne1 = analyse_tds_expression tds e1 in 
@@ -42,12 +46,13 @@ let rec analyse_tds_expression tds e =
   | AstSyntax.Ident n ->
     begin 
       match chercherGlobalement tds n with
-        | None ->
-          let info = InfoVar (n,Undefined, 0, "") in
-          let ia = info_to_info_ast info in
-          Ident(ia)
-        | Some _ as ia ->
-          Ident(ia)
+        | None -> raise (IdentifiantNonDeclare n)
+        | Some ia ->
+          begin
+            match info_ast_to_info ia with
+            | InfoConst _ | InfoVar(_,_,_,_) -> Ident ia 
+            | _ -> raise(MauvaiseUtilisationIdentifiant n)
+          end
     end
   | AstSyntax.True ->
     True
@@ -56,7 +61,10 @@ let rec analyse_tds_expression tds e =
   | AstSyntax.Entier i -> 
     Entier(i)
   | AstSyntax.Binaire (b,e1,e2) -> 
-    Binaire(e, e1, e2)
+    let ne1 = analyse_tds_expression tds e1 in 
+    let ne2 = analyse_tds_expression tds e2 in 
+    Binaire(b, ne1, ne2)
+  | _ -> True
     
 
 (* analyse_tds_instruction : AstSyntax.instruction -> tds -> AstTds.instruction *)
@@ -107,7 +115,7 @@ let rec analyse_tds_instruction tds i =
               let ne = analyse_tds_expression tds e in
               (* Renvoie de la nouvelle affectation où le nom a été remplacé par l'information 
               et l'expression remplacée par l'expression issue de l'analyse *)
-               Affectation (ne, info)
+              Affectation (ne, info)
             |  _ ->
               (* Modification d'une constante ou d'une fonction *)  
               raise (MauvaiseUtilisationIdentifiant n) 
@@ -175,9 +183,23 @@ and analyse_tds_bloc tds li =
 (* Vérifie la bonne utilisation des identifiants et tranforme la fonction
 en une fonction de type AstTds.fonction *)
 (* Erreur si mauvaise utilisation des identifiants *)
-let analyse_tds_fonction maintds (AstSyntax.Fonction(t,n,lp,li,e))  =
-  failwith "todo"
-  
+let analyse_tds_fonction maintds (AstSyntax.Fonction(t,n,lp,li,e)) = 
+  match chercherLocalement maintds n with 
+  | Some _ -> raise(DoubleDeclaration n)
+  | None -> 
+    let info = InfoVar (n,Undefined, 0, "") in
+    let ia = info_to_info_ast info in 
+    let tdsparam = creerTDSFille maintds in
+    let lia = (List.map (fun x -> (match chercherLocalement tdsparam (snd(x)) with
+                                  | Some _ -> raise (DoubleDeclaration (snd(x)))
+                                  | None -> let infov = InfoVar(snd(x), Undefined, 0, "") in 
+                                            let infoast = info_to_info_ast infov in 
+                                            let _ = (ajouter tdsparam (snd(x)) infoast) in
+                                            (fst(x), infoast))) lp) in
+    let tdsbloc = creerTDSFille tdsparam in
+    let nli = List.map (analyse_tds_instruction tdsbloc) li in 
+    let ne = analyse_tds_expression tdsbloc e in
+    Fonction(t, ia, lia, nli, ne)
 
 (* analyser : AstSyntax.ast -> AstTds.ast *)
 (* Paramètre : le programme à analyser *)
