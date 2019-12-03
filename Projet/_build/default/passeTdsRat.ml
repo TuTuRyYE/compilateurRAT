@@ -19,7 +19,7 @@ en une expression de type AstTds.expression *)
 (* Erreur si mauvaise utilisation des identifiants *)
 let rec analyse_tds_expression tds e = 
   match e with
-  (*| AstSyntax.AppelFonction (n, le) ->
+  | AstSyntax.AppelFonction (n, le) ->
     begin
       match chercherGlobalement tds n with
         | None -> 
@@ -31,8 +31,7 @@ let rec analyse_tds_expression tds e =
             List.map(fun exp -> analyse_tds_expression tds exp) le in AppelFonction(ia,nl)
           | _ -> raise(MauvaiseUtilisationIdentifiant n)
           end
-    end*)
-
+    end
   | AstSyntax.Rationnel (e1,e2) -> 
     let ne1 = analyse_tds_expression tds e1 in 
     let ne2 = analyse_tds_expression tds e2 in 
@@ -64,7 +63,6 @@ let rec analyse_tds_expression tds e =
     let ne1 = analyse_tds_expression tds e1 in 
     let ne2 = analyse_tds_expression tds e2 in 
     Binaire(b, ne1, ne2)
-  | _ -> True
     
 
 (* analyse_tds_instruction : AstSyntax.instruction -> tds -> AstTds.instruction *)
