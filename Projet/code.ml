@@ -91,7 +91,7 @@ let sout =
   bouclePrintSout ; etiquette de boucle de l'affichage 
   LOAD (1) 3[LB] 
   LOAD (1) 4[LB]
-  SUBR INeg
+  SUBR ISub
   JUMPIF (0) finBouclePrintSout
   LOAD (1) -1[LB] ; adresse de la chaine en sommet de pile
   LOAD (1) 4[LB] ; indice pour le décalage
@@ -132,7 +132,7 @@ let sout =
     copiec1
     LOAD (1) 5[LB]
     LOAD (1) 6[LB]
-    SUBR INeg ; test si on a fini la boucle
+    SUBR ISub ; test si on a fini la boucle
     JUMPIF (0) fincopiec1
     LOAD (1) -2[LB]
     LOAD (1) 6[LB]
@@ -160,7 +160,7 @@ let sout =
     copiec2
     LOAD (1) 5[LB]
     LOAD (1) 6[LB]
-    SUBR INeg ; test si on a fini la boucle
+    SUBR ISub ; test si on a fini la boucle
     JUMPIF (0) fincopiec2
     LOAD (1) -1[LB]
     LOAD (1) 6[LB]
@@ -190,7 +190,7 @@ let sout =
     "SSub ; -3[LB] adresse de la chaine - -2[LB] indice de départ - -1[LB] indice de fin
     LOAD (1) -1[LB]
     LOAD (1) -2[LB]
-    SUBR INeg 
+    SUBR ISub 
     LOADL 1
     SUBR IAdd ; taille de la chaine en 3[LB]
     LOAD (1) -1[ST]
@@ -204,7 +204,7 @@ let sout =
     bouclesub
     LOAD (1) 3[LB]
     LOAD (1) 5[LB]
-    SUBR INeg
+    SUBR ISub
     JUMPIF (0) finbouclesub
     LOAD (1) -3[LB]
     LOADL 1
