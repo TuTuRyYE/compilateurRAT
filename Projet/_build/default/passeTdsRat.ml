@@ -171,7 +171,7 @@ and analyse_tds_bloc tds li =
   (* Analyse des instructions du bloc avec la tds du nouveau bloc 
   Cette tds est modifiée par effet de bord *)
   let nli = List.map (analyse_tds_instruction tdsbloc) li in 
-  afficher_locale tdsbloc;
+  (* afficher_locale tdsbloc; *)
   nli
 
 
@@ -185,8 +185,9 @@ let analyse_tds_fonction maintds (AstSyntax.Fonction(t,n,lp,li,e)) =
   match chercherLocalement maintds n with 
   | Some _ -> raise(DoubleDeclaration n)
   | None -> 
-    let info = InfoVar (n,Undefined, 0, "") in
+    let info = InfoFun (n,Undefined, []) in
     let ia = info_to_info_ast info in 
+    ajouter maintds n ia;
     let tdsparam = creerTDSFille maintds in
     let lia = (List.map (fun x -> (match chercherLocalement tdsparam (snd(x)) with
                                   | Some _ -> raise (DoubleDeclaration (snd(x)))
@@ -206,8 +207,8 @@ en un programme de type AstTds.ast *)
 (* Erreur si mauvaise utilisation des identifiants *)
 let analyser (AstSyntax.Programme (fonctions,prog)) =
   let tds = creerTDSMere () in 
-(*  let nf = List.map (analyse_tds_fonction tds fonctions) in *)
-  let nf = [] in
+  let nf = List.map (analyse_tds_fonction tds) fonctions in 
+  (*let nf = [] in *)
   let nb = analyse_tds_bloc tds prog in
   Programme(nf, nb)
 

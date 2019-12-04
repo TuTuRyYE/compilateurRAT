@@ -4,7 +4,7 @@ int add (int a int b){
   return (a+(b+c));}
 
 test{
-  int x = y;
+  int x = 3;
   x = 4;
   const y = 5;
   int z = (x+y);

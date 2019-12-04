@@ -3,14 +3,14 @@ open Exceptions
 
 exception ErreurNonDetectee;;
   
-(*
+
 let%test_unit "testDoubleDeclarationVariable1" = 
   try 
     let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationVariable1.rat"
     in raise ErreurNonDetectee
   with
   | DoubleDeclaration("x") -> ()
-*)
+
 	
 let%test_unit "testDoubleDeclarationVariable2" = 
   let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationVariable2.rat" in ()
@@ -24,7 +24,7 @@ let%test_unit "testDoubleDeclarationVariable4" =
     in raise ErreurNonDetectee
   with
   | DoubleDeclaration("x") -> ()
-  (*
+  
 let%test_unit "testDoubleDeclarationVariable5" = 
   try 
     let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationVariable5.rat"
@@ -205,6 +205,7 @@ let%test_unit "testUtilisation21" =
   with
   | IdentifiantNonDeclare("y") -> ()
 
+  
 let%test_unit "testUtilisation22" = 
   try 
     let _ = compiler "../../fichiersRat/src-rat-tds-test/testUtilisation22.rat"
@@ -257,13 +258,14 @@ let%test_unit "testDoubleDeclarationFonction" =
   with
   | DoubleDeclaration("add") -> ()
 
+
 let%test_unit "testDoubleDeclarationParametre1" = 
   try 
     let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationParametre1.rat"
     in raise ErreurNonDetectee
   with
   | DoubleDeclaration("a") -> ()
-  
+
 let%test_unit "testDoubleDeclarationParametre2" = 
   try 
     let _ = compiler "../../fichiersRat/src-rat-tds-test/testDoubleDeclarationParametre2.rat"
@@ -342,4 +344,4 @@ let%test_unit "code_testfuns" =
 
 let%test_unit "code_complique" = 
   let _ = compiler   "../../fichiersRat/src-rat-tam-test/complique.rat" in ()
-*)
+  
