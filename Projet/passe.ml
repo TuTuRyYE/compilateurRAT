@@ -128,3 +128,4 @@ struct
   let analyser _ = ""
 
 end
+Raise(TypeInattendu(e))

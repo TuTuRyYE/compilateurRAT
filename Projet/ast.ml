@@ -67,6 +67,7 @@ type expression =
   (* Opération binaire représentée par l'opérateur, l'opérande gauche et l'opérande droite *)
   | Binaire of binaire * expression * expression
 
+
 (* Instructions de Rat *)
 type bloc = instruction list
 and instruction =
@@ -172,6 +173,7 @@ struct
     | False
     | Entier of int
     | Binaire of AstSyntax.binaire * expression * expression
+  
 
   (* instructions existantes dans notre langage *)
   (* ~ instruction de l'AST syntaxique où les noms des identifiants ont été 

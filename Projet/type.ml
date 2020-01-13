@@ -15,7 +15,7 @@ let est_compatible t1 t2 =
   | Rat, Rat -> true 
   | _ -> false 
 
-let est_compatible_list lt1 lt2 =
+let est_compatible_list lt1 lt2 =Raise(TypeInattendu(e))
   try
     List.for_all2 est_compatible lt1 lt2
   with Invalid_argument _ -> false
