@@ -67,6 +67,7 @@ type expression =
   (* Opération binaire représentée par l'opérateur, l'opérande gauche et l'opérande droite *)
   | Binaire of binaire * expression * expression
 
+
 (* Instructions de Rat *)
 type bloc = instruction list
 and instruction =
@@ -172,6 +173,7 @@ struct
     | False
     | Entier of int
     | Binaire of AstSyntax.binaire * expression * expression
+  
 
   (* instructions existantes dans notre langage *)
   (* ~ instruction de l'AST syntaxique où les noms des identifiants ont été 
@@ -259,8 +261,6 @@ module AstPlacement =
 struct
 
 (* Expressions existantes dans notre langage *)
-(* = expression de AstType  *)
-type expression = AstType.expression
 
 (* instructions existantes dans notre langage *)
 (* = instructions de AstType  *)
@@ -269,7 +269,7 @@ type bloc = instruction list
 
 (* nom, corps, expression de retour, informations associées à l'identificateur *)
 (* Plus besoin de la liste des paramètres mais on la garde pour les tests du placements mémoire *)
-type fonction = Fonction of Tds.info_ast * Tds.info_ast list * instruction list * expression
+type fonction = Fonction of Tds.info_ast * Tds.info_ast list * instruction list * AstType.expression
 
 (* Structure d'un programme dans notre langage *)
 type programme = Programme of fonction list * bloc

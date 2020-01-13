@@ -126,6 +126,4 @@ struct
   type t2 = string
 
   let analyser _ = ""
-
 end
-Raise(TypeInattendu(e))
