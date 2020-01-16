@@ -459,7 +459,9 @@ let%test_unit "test"=
   let _ = compiler "../../fichiersRat/src-rat-type-test/test.rat" in ()
 
 let%test_unit "test2"= 
-  let _ = compiler "../../fichiersRat/src-rat-type-test/test2.rat" in ()
+  let _ = compiler "../../fichiersRat/src-rat-type-test/test2.rat" in () 
+  
+  
 
 
 (* Fichiers de tests de la génération de code -> doivent passer le typage *)

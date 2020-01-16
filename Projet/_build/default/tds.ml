@@ -8,7 +8,7 @@ type info =
   | InfoFun of string * typ * typ list
 
 (* Données stockées dans la tds  et dans les AST : pointeur sur une information *)
-type info_ast = info ref  
+type info_ast = info ref
 
 (* Table des symboles hiérarchique *)
 (* Les tables locales sont codées à l'aide d'une hashtable *)
@@ -84,4 +84,41 @@ let afficher_globale tds =
      |InfoVar (n,t,_,_) -> i:= InfoVar (n,t,d,b)
      | _ -> failwith "Appel modifier_adresse_info pas sur un InfoVar"
     
-   
+let get_type info = 
+  match info with 
+  | InfoConst (_, _) -> Type.Int
+  | InfoVar(_, typ, _, _) -> typ
+  | InfoFun(_, typ, _) -> typ
+
+let get_type_ast info_ast = 
+  let info = info_ast_to_info info_ast in
+  (* get_type info *)
+  match info with 
+  | InfoConst (_, _) -> Type.Int
+  | InfoVar(_, typ, _, _) -> typ
+  | InfoFun(_, typ, _) -> typ
+
+let get_nom_ast info_ast =
+  let info = info_ast_to_info info_ast in
+  match info with 
+  | InfoVar (nom, _, _, _) -> nom
+  | _ -> failwith "get_nom_ast : N'est pas une infovar"
+  
+let get_addr_ast info_ast =
+  let info = info_ast_to_info info_ast in
+  match info with 
+  | InfoVar (_, _, addr, _) -> addr
+  | _ -> failwith "get_addr_ast : N'est pas une infovar"
+
+let get_reg_ast info_ast =
+  let info = info_ast_to_info info_ast in
+  match info with 
+  | InfoVar (_, _, _, reg) -> reg
+  | _ -> failwith "get_reg_ast : N'est pas une infovar"
+
+  
+  let get_type_fonction_param_ast info_ast =
+    let info = info_ast_to_info info_ast in
+    match info with 
+    | InfoFun (_, _, ts) -> ts
+    | _ -> failwith "get_type_fonction_ast : N'est pas une infofun"

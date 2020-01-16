@@ -21,7 +21,7 @@ let rec analyserCode_expression e =
   | False -> "LOADL 0\n"
   | Entier(i) -> "LOADL "^(string_of_int i)^"\n"
   | Ident(info_ast) ->
-    "LOAD ("^(string_of_int (getTaille (getType info_ast)))^") "^(string_of_int (getAddr info_ast))^"["^(getReg info_ast)^"]\n"
+    "LOAD ("^(string_of_int (getTaille (get_type_ast info_ast)))^") "^(string_of_int (get_addr_ast info_ast))^"["^(get_reg_ast info_ast)^"]\n"
   | Rationnel(e1, e2) ->
     (analyserCode_expression e1)
     ^(analyserCode_expression e2)
@@ -48,11 +48,11 @@ let rec analyserCode_expression e =
     )
   | AppelFonction(info_ast, le) ->
     List.fold_right (fun e q -> (analyserCode_expression e)^q) le ""
-    ^"CALL (SB) "^(getFunNom info_ast)^"\n"
+    ^"CALL (SB) "^(get_nom_ast info_ast)^"\n"
 
 (* Renvoi la taille d'une instruction *)
   let taille_i i = match i with
-    |Declaration(e,info) -> getTaille (getType info)
+    |Declaration(e,info) -> getTaille (get_type_ast info)
     |_ -> 0
 
     (* Renvoi la taille d'une liste d'instruction *)
@@ -64,13 +64,13 @@ let rec analyserCode_expression e =
   let rec analyserCode_instruction i = match i with
     | Empty -> ""
     | Declaration(e,info) ->
-      let taille = string_of_int (getTaille (getType info)) in
+      let taille = string_of_int (getTaille (get_type_ast info)) in
       "PUSH "^taille^"\n"
       ^(analyserCode_expression e)
-      ^"STORE ("^taille^") "^(string_of_int (getAddr info))^"["^(getReg info)^"]\n"
+      ^"STORE ("^taille^") "^(string_of_int (get_addr_ast info))^"["^(get_reg_ast info)^"]\n"
     | Affectation(e, info) ->
       (analyserCode_expression e)
-      ^"STORE ("^string_of_int (getTaille (getType info))^") "^(string_of_int (getAddr info))^"["^(getReg info)^"]\n"
+      ^"STORE ("^string_of_int (getTaille (get_type_ast info))^") "^(string_of_int (get_addr_ast info))^"["^(get_reg_ast info)^"]\n"
     | Conditionnelle(e,bt,be) ->
       let etiquetteElse = getEtiquette () in
       let etiquetteFinIf = getEtiquette () in
@@ -117,10 +117,10 @@ let rec analyserCode_expression e =
 (* Paramètre info : La fonction à traduire *)
 (* Analyse une fonction rat pour la traduire en code Tam *)
   let analyserCode_fonction (Ast.AstPlacement.Fonction(info, linfo_ast, li, e)) =
-    getFunNom info^"\n"
+    get_nom_ast info^"\n"
     ^(analyserCode_bloc li)
     ^(analyserCode_expression e)
-    ^(let tailleRetour = getTaille (getType info) in
+    ^(let tailleRetour = getTaille (get_type_ast info) in
       "RETURN (1) "^(string_of_int tailleRetour)^"\n")
 
   let analyser (Ast.AstPlacement.Programme(fonctions, bloc)) =

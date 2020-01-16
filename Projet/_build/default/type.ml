@@ -26,4 +26,3 @@ let getTaille t =
   | Bool -> 1
   | Rat -> 2
   | Undefined -> 0
-  

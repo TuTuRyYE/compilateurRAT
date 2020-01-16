@@ -19,7 +19,7 @@ struct
   let rec analyserPlacement_instruction dep reg i =
     match i with
     | AstType.Declaration(e, info_ast) ->
-      let t = getTaille (getType info_ast) in
+      let t = getTaille (get_type_ast info_ast) in
       modifier_adresse_info dep reg info_ast;
       (t+dep, AstType.Declaration(e, info_ast))
     | AstType.TantQue(e, b) ->
@@ -47,7 +47,7 @@ struct
     match lp with
     | [] -> ()
     | info_ast::q ->
-      let t = getTaille (getType info_ast) in
+      let t = getTaille (get_type_ast info_ast) in
       modifier_adresse_info (dep-t) "LB" info_ast;
       analyserPlacement_param_fonction q (dep-t)
 
