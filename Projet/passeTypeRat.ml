@@ -27,13 +27,15 @@ struct
         let (ne, te) = analyserType_expression e in 
         if (est_compatible te Int) then
           (Numerateur ne, Int)
-        else raise (TypeInattendu (te, Rat))
+        else raise (Exceptions.TypeInattendu (te, Rat))
     (* Pareil pour les dénominateurs*)
     | AstTds.Denominateur e -> 
         let (ne, te) = analyserType_expression e in 
         if (est_compatible te Int) then
-          (Denominateur ne, Int)
-        else raise (TypeInattendu (te, Rat))
+          raise(TypeInattendu(te, Rat))
+          (*(Denominateur ne, Int)*)
+        else 
+          raise (TypeInattendu (te, Rat))
     (* Pour un rationnel, on vérifie le numérateur, et le dénominateur *)
     | AstTds.Rationnel (e1, e2) -> 
       let (n1, t1) = analyserType_expression e1 in
@@ -96,7 +98,8 @@ struct
            modifier_type_info t info ;
            Declaration(ne, info)
          end
-       else (raise (TypeInattendu (te, t)))
+       else
+          raise (Exceptions.TypeInattendu(te, t))
 
     (* On vérifie que l'info affectée est compatible avec l'expression *)
     | AstTds.Affectation (e, info) -> 
